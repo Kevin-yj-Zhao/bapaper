@@ -1,5 +1,6 @@
 .DS_Store
 dist/bower_components/
+src/bower_components/
 node_modules/
 upload.sh
 
