@@ -1,0 +1,37 @@
+<div class="row">
+  <div class="col-md-3 page-left-sidebar">
+	<h4 class="text-center">审核列表</h4>
+  	<div class="list-group">
+		<button type="button" class="list-group-item">未审核</button>
+		<button type="button" class="list-group-item">已通过</button>
+		<button type="button" class="list-group-item">未通过</button>
+	</div>
+  </div>
+  <div class="col-xs-9 page-right">
+        <table class="table">
+            <thead>
+                <th>姓名</th>
+                <th>手机号</th>
+                <th>指导老师</th>
+                <th>提交时间</th>
+                <th>审核时间</th>
+                <th>审核状态</th>
+                <td>操作</td>
+            </thead>
+            <tbody>
+                <tr ng-repeat="reviewStudent in reviewStudents">
+                <td>{{reviewStudent.name}}</td>
+                <td>{{reviewStudent.phone}}</td>
+                <td>{{reviewStudent.teacherName}}</td>
+                <td>{{reviewStudent.submitTime}}</td>
+                <td>{{reviewStudent.reviewTime}}</td>
+                <td>{{reviewStudent.reviewStatus}}</td>
+                <td>
+                    <a href="#/review/{{reviewStudent.studentId}}" ng-if="student.reviewStatus === '未通过'">查看</a>
+                    <a href="#/review/{{reviewStudent.studentId}}" ng-if="student.reviewStatus !== '未通过'">不查看</a>
+                </td>
+                </tr>
+            </tbody>
+        </table>
+  </div>
+</div>
