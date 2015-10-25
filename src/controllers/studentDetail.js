@@ -7,6 +7,8 @@ app.controller('StudentDetailCtrl',[
 		$http.get(url)
 			.success(function(data) {
 				$scope.formData = data;
+				var csrfmiddlewaretoken = document.getElementsByName('csrfmiddlewaretoken')[0].value;
+				$scope.formData.csrfmiddlewaretoken = csrfmiddlewaretoken;
 			});
 
 

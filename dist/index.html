@@ -5,6 +5,7 @@
         <script src="/static/seed.js"></script>
     </head>
     <body>
+    {% csrf_token %}
     	<main-nav></main-nav>
     	<div ng-view></div>
     </body>
