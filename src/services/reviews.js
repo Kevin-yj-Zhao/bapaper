@@ -3,8 +3,7 @@
 app.service('Reviews', [
 	'$resource',
 	function($resource) {
-		var url = '';
-		return $resource(url, {
+		return $resource('/assign/reviews', {
 			query: {
 				isArray: true,
 				method: 'GET',

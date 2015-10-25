@@ -65,6 +65,34 @@
 	</div>
 
 	<div class="control-group">
+		<label class="control-label" for="type1">种类1</label>
+		<select ng-model="formData.Type1" ng-options="m.id as m.name for m in selectType1">
+    		<option value="">-- 请选择 --</option>
+		</select>
+	</div>
+
+	<div class="control-group">
+		<label class="control-label" for="type1">种类2</label>
+		<select ng-model="formData.Type2" ng-options="m.id as m.name for m in selectType2">
+    		<option value="">-- 请选择 --</option>
+		</select>
+	</div>
+
+	<div class="control-group">
+		<label class="control-label" for="type1">种类3</label>
+		<select ng-model="formData.Type3" ng-options="m.id as m.name for m in selectType3">
+    		<option value="">-- 请选择 --</option>
+		</select>
+	</div>
+
+	<div class="control-group">
+		<label class="control-label" for="type1">种类4</label>
+		<select ng-model="formData.Type4" ng-options="m.id as m.name for m in selectType4">
+    		<option value="">-- 请选择 --</option>
+		</select>
+	</div>
+
+	<div class="control-group">
 	  	<label class="control-label" for="task1">任务1</label>
 	  	<input type="text" ng-model="formData.Task1" id="task1">
 	</div>

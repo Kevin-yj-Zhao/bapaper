@@ -1,0 +1,56 @@
+<div class="row">
+    <div class="col-md-3 page-left-sidebar">
+		<h4 class="text-center">功能列表</h4>
+	  	<div class="list-group">
+			<button type="button" class="list-group-item" ng-click="changeUpload()">导入文件</button>
+			<button type="button" class="list-group-item" ng-click="changeAssign()">分配专家</button>
+			<button type="button" class="list-group-item" ng-click="changeDeadline()">截止时间</button>
+			<button type="button" class="list-group-item" ng-click="changeBlind()">抽取盲审</button>
+		</div>
+    </div>
+    <div ng-if="type === 'upload'" class="col-xs-9 page-right">
+    	<div>
+    		<form method="post" action="/assign/upload">
+    			<label>导入学生文件</label>
+    			<input type="file" name="students">
+    			<label>导入学生文件</label>
+    			<input type="file" name="teachers">
+    			<button type="submit">提交文件</button>
+    		</form>
+    		
+    	</div>
+    </div>
+    <div ng-if="type === 'assign'" class="col-xs-9 page-right">
+       	<div>
+       		<form method="post" action="/assign/assignExperts">
+	       		<div ng-repeat="teacher in teacherList">
+	       			<input type="checkbox" value={{teacher.id}}>
+	       			<label>{{teacher.name}}</label>
+	       		</div>
+	       		<button type="submit">提交</button>
+	       	</form>
+       	</div>
+    </div>
+    <div ng-if="type === 'deadline'" class="col-xs-9 page-right">
+	    <form method="post" action="/assign/deadlines">
+	    	<div>
+	       		<label>任务书截止时间</label>
+	       		<input type="date" name="taskDeadline">
+	       	</div>
+	       	<div>
+	       		<label>审核截止时间</label>
+	       		<input type="date" name="reviewDeadline">
+	       	</div>
+	       	<button type="submit">提交</button>
+	    </form>
+    </div>
+    <div ng-if="type === 'blind'" class="col-xs-9 page-right">
+       	<div>
+       		<form method="post" action="/assign/blind">
+       			<label>请输入盲审后四位学号</label>
+	       		<input type="text" name="lastNumber">
+	       		<button type="submit">提交</button>
+       		</form>
+       	</div>
+    </div>
+</div>

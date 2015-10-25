@@ -1,16 +1,16 @@
 <nav class="navbar navbar-default navbar-fixed-top">
 	<div class="navbar-content">
 		<div class="navbar-header">
-			<a class="navbar-brand" href="#/">本科毕设</a>
+			<a class="navbar-brand" href="">本科毕设</a>
 		</div>
 		<ul class="nav navbar-nav navbar-main-nav">
-			<li><a href="#/students">学生管理</a></li>
-			<li><a href="#/reviews">评审管理</a></li>
+			<li><a ng-if="user.Teacher === true" href="#/students">学生管理</a></li>
+			<li><a ng-if="user.Expert === true" href="#/reviews">评审管理</a></li>
+			<li><a ng-if="user.Admin === true" href="#/admin">管理</a></li>
 		</ul>
 		<ul class="nav navbar-nav navbar-right">
 			<li><a>{{user.UserName}}</a></li>
 			<li><a href="/accounts/logout">Logout</a></li>
 		</ul>
-	</div>
-	
-</nav>
+	</div>	
+</nav> 

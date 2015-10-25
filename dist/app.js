@@ -38762,43 +38762,123 @@ app.config(['$routeProvider',
 				templateUrl:'pages/reviewDetail.html',
 				controller: 'ReviewDetailCtrl'
 			}).
-			when('/login', {
-				templateUrl: 'pages/login.html',
-				controller:'LoginCtrl'
+			when('/admin', {
+				templateUrl: 'pages/admin.html',
+				controller:'AdminCtrl'
 			}).
 			otherwise({
 				redirectTo:'/students'
 			});
 	}
 ]);
-'use strict';
+app.controller('AdminCtrl',[
+	'$scope',
+	'$http',
+	function($scope, $http) {
+		$scope.type = 'upload';
 
-app.constant('AUTH_EVENTS', {
-  loginSuccess: 'auth-login-success',
-  loginFailed: 'auth-login-failed',
-  logoutSuccess: 'auth-logout-success',
-  sessionTimeout: 'auth-session-timeout',
-  notAuthenticated: 'auth-not-authenticated',
-  notAuthorized: 'auth-not-authorized'
-});
+
+		$scope.changeUpload = function() {
+			$scope.type = 'upload';
+		}
+
+		$scope.changeAssign = function() {
+			$scope.type = 'assign';
+			// if ( !$scope.teacherList) {
+			// 	$http.get('/assign/teachers', function(data) {
+			// 		$scope.teacherList = data;
+			// 	});
+			// }
+			$scope.teacherList = [{
+				id: '123',
+				name:'刘宗明'
+			},{
+				id: '234',
+				name: '赵小鸡'
+			}];
+		}
+
+		$scope.changeDeadline = function() {
+			$scope.type = 'deadline';
+		}
+
+		$scope.changeBlind = function() {
+			$scope.type = 'blind';
+		}
+	}
+]);
 app.controller('ReviewCtrl',[
 	'$scope',
-	function($scope) {
-		$scope.reviewStudents = [{
-			'studentId':'1234567',
-			'name':'赵小鸡',
-			'phone': '18627773184',
-			'teacherName':'胡广煜',
-			'submitTime': '2013.8.10',
-			'reviewTime': '',
-			'reviewStatus':'未通过'
-		}]
+	'Reviews',
+	function($scope, Reviews) {
+		$scope.reviewStudents = Reviews.query();
 	}
 ]);
 app.controller('ReviewDetailCtrl',[
 	'$scope',
-	function($scope) {
-		
+	'$http',
+	'$routeParams',
+	function($scope, $http, $routeParams) {
+		var url = '/assign/student/' + $routeParams.studentId;
+		$http.get(url)
+			.success(function(data) {
+				$scope.formData = data;
+			});
+
+
+				$scope.selectType1 = [{
+			id: '1',
+			name: '工程实践类'
+		}, {
+			id: '2',
+			name: '研究设计类'
+		}, {
+			id: '3',
+			name: '理论分析类'
+		}];
+
+		$scope.selectType2 = [{
+			id: '1',
+			name: '软件'
+		}, {
+			id: '2',
+			name: '硬件'
+		}, {
+			id: '3',
+			name: '软硬结合'
+		}, {
+			id: '4',
+			name: '非软硬件'
+		}];
+
+		$scope.selectType3 = [{
+			id: '1',
+			name: '无线通信理论技术'
+		}, {
+			id: '2',
+			name: '通信网络理论技术'
+		}, {
+			id: '3',
+			name: '数字内容与多媒体通信'
+		}];
+
+
+		$scope.selectType4 = [{
+			id: '1',
+			name: '大学生创新设计'
+		}, {
+			id: '2',
+			name: '科研项目'
+		}, {
+			id: '3',
+			name: '非科研项目'
+		}, {
+			id: '4',
+			name: '其他项目'
+		},{
+			id: '5',
+			name: '教师课题'
+		}];
 	}
 ]);
 app.controller('StudentCtrl',[
@@ -38834,17 +38914,81 @@ app.controller('StudentDetailCtrl',[
 				}
 			});
 		}
+
+		$scope.selectType1 = [{
+			id: '1',
+			name: '工程实践类'
+		}, {
+			id: '2',
+			name: '研究设计类'
+		}, {
+			id: '3',
+			name: '理论分析类'
+		}];
+
+		$scope.selectType2 = [{
+			id: '1',
+			name: '软件'
+		}, {
+			id: '2',
+			name: '硬件'
+		}, {
+			id: '3',
+			name: '软硬结合'
+		}, {
+			id: '4',
+			name: '非软硬件'
+		}];
+
+		$scope.selectType3 = [{
+			id: '1',
+			name: '无线通信理论技术'
+		}, {
+			id: '2',
+			name: '通信网络理论技术'
+		}, {
+			id: '3',
+			name: '数字内容与多媒体通信'
+		}];
+
+
+		$scope.selectType4 = [{
+			id: '1',
+			name: '大学生创新设计'
+		}, {
+			id: '2',
+			name: '科研项目'
+		}, {
+			id: '3',
+			name: '非科研项目'
+		}, {
+			id: '4',
+			name: '其他项目'
+		},{
+			id: '5',
+			name: '教师课题'
+		}];
 	}
 ]);
 'use strict';
 
 app.directive('mainNav', [
 	'User',
-	function(User) {
+	'$location',
+	function(User, $location) {
 		return {
 			templateUrl: 'directives/nav/mainNav.html',
 			link: function($scope, ele) {
-				$scope.user = User.get();
+				// $scope.user = {
+				// 	Admin: true
+				// };
+				User.get(function(data) {
+					$scope.user = data;
+					if (data.Admin) {
+						$location.path('/admin');
+					}
+				});
+
 			}
 		}
 	}
@@ -38854,8 +38998,7 @@ app.directive('mainNav', [
 app.service('Reviews', [
 	'$resource',
 	function($resource) {
-		var url = '';
-		return $resource(url, {
+		return $resource('/assign/reviews', {
 			query: {
 				isArray: true,
 				method: 'GET',
@@ -38899,8 +39042,9 @@ app.service('User', [
 		return $resource('/assign/userinfo');
 	}
 ]);
-angular.module("app").run(["$templateCache", function($templateCache) {$templateCache.put("pages/reviewDetail.html","<div>this is the review page</div>");
-$templateCache.put("pages/reviews.html","<div class=\"row\">\n  <div class=\"col-md-3 page-left-sidebar\">\n	<h4 class=\"text-center\">审核列表</h4>\n  	<div class=\"list-group\">\n		<button type=\"button\" class=\"list-group-item\">未审核</button>\n		<button type=\"button\" class=\"list-group-item\">已通过</button>\n		<button type=\"button\" class=\"list-group-item\">未通过</button>\n	</div>\n  </div>\n  <div class=\"col-xs-9 page-right\">\n        <table class=\"table\">\n            <thead>\n                <th>姓名</th>\n                <th>手机号</th>\n                <th>指导老师</th>\n                <th>提交时间</th>\n                <th>审核时间</th>\n                <th>审核状态</th>\n                <td>操作</td>\n            </thead>\n            <tbody>\n                <tr ng-repeat=\"reviewStudent in reviewStudents\">\n                <td>{{reviewStudent.name}}</td>\n                <td>{{reviewStudent.phone}}</td>\n                <td>{{reviewStudent.teacherName}}</td>\n                <td>{{reviewStudent.submitTime}}</td>\n                <td>{{reviewStudent.reviewTime}}</td>\n                <td>{{reviewStudent.reviewStatus}}</td>\n                <td>\n                    <a href=\"#/review/{{reviewStudent.studentId}}\" ng-if=\"student.reviewStatus === \'未通过\'\">查看</a>\n                    <a href=\"#/review/{{reviewStudent.studentId}}\" ng-if=\"student.reviewStatus !== \'未通过\'\">不查看</a>\n                </td>\n                </tr>\n            </tbody>\n        </table>\n  </div>\n</div>");
-$templateCache.put("pages/studentDetail.html","<form class=\"form-horizontal\">\n\n	<div class=\"control-group center-block\">\n	  	<label class=\"control-label\" for=\"teacherName\">指导老师姓名</label>\n	  	<input type=\"text\" ng-model=\"formData.Teacher\"id=\"teacherName\">\n	</div>\n\n	<div class=\"control-group\">\n	  	<label class=\"control-label\" for=\"academicTitle\">指导老师职称</label>\n	  	<input type=\"text\" ng-model=\"formData.AcademicTitle\" id=\"academicTitle\">\n	</div>\n\n	<div class=\"control-group\">\n	  	<label class=\"control-label\" for=\"affiliation\">指导老师学院</label>\n	  	<input type=\"text\" ng-model=\"formData.Affiliation\" id=\"affiliation\">\n	</div>\n\n	<div class=\"control-group\">\n	  	<label class=\"control-label\" for=\"teacherPhone\">指导老师电话</label>\n	  	<input type=\"text\" ng-model=\"formData.TeacherPhone\" id=\"teacherPhone\">\n	</div>\n\n	<div class=\"control-group\">\n	  	<label class=\"control-label\" for=\"teacherEmail\">指导老师邮箱</label>\n	  	<input type=\"text\" ng-model=\"formData.TeacherEmail\" id=\"teacherEmail\">\n	</div>\n\n	<div class=\"control-group\">\n	  	<label class=\"control-label\" for=\"studentID\">学号</label>\n	  	<input type=\"text\" ng-model=\"formData.StudentID\" id=\"studentID\">\n	</div>\n\n	<div class=\"control-group\">\n	  	<label class=\"control-label\" for=\"studentName\">学生姓名</label>\n	  	<input type=\"text\" ng-model=\"formData.Name\" id=\"studentName\">\n	</div>\n\n	<div class=\"control-group\">\n	  	<label class=\"control-label\" for=\"grade\">年级</label>\n	  	<input type=\"text\" ng-model=\"formData.Grade\" id=\"grade\">\n	</div>\n\n	<div class=\"control-group\">\n	  	<label class=\"control-label\" for=\"major\">专业</label>\n	  	<input type=\"text\" ng-model=\"formData.Major\" id=\"major\">\n	</div>\n\n	<div class=\"control-group\">\n	  	<label class=\"control-label\" for=\"class\">班级</label>\n	  	<input type=\"text\" ng-model=\"formData.Class\" id=\"class\">\n	</div>\n\n	<div class=\"control-group\">\n	  	<label class=\"control-label\" for=\"studentPhone\">学生电话</label>\n	  	<input type=\"text\" ng-model=\"formData.StudentPhone\" id=\"studentPhone\">\n	</div>\n\n	<div class=\"control-group\">\n	  	<label class=\"control-label\" for=\"Title\">论文题目名</label>\n	  	<input type=\"text\" ng-model=\"formData.Title\" id=\"Title\">\n	</div>\n	<div class=\"control-group\">\n	  	<label class=\"control-label\" for=\"EnglishTitle\">论文英文题目</label>\n	  	<input type=\"text\" ng-model=\"formData.EnglishTitle\" id=\"EnglishTitle\">\n	</div>\n\n	<div class=\"control-group\">\n	  	<label class=\"control-label\" for=\"task1\">任务1</label>\n	  	<input type=\"text\" ng-model=\"formData.Task1\" id=\"task1\">\n	</div>\n	<div class=\"control-group\">\n	  	<label class=\"control-label\" for=\"task2\">任务2</label>\n	  	<input type=\"text\" ng-model=\"formData.Task2\" id=\"task2\">\n	</div>\n	<div class=\"control-group\">\n	  	<label class=\"control-label\" for=\"task3\">任务3</label>\n	  	<input type=\"text\" ng-model=\"formData.Task3\" id=\"task3\">\n	</div>\n\n	<div class=\"control-group\">\n	  	<label class=\"control-label\" for=\"Outcome1\">目标1</label>\n	  	<input type=\"text\" ng-model=\"formData.Outcome1\" id=\"Outcome1\">\n	</div>\n\n	<div class=\"control-group\">\n	  	<label class=\"control-label\" for=\"Outcome2\">目标2</label>\n	  	<input type=\"text\" ng-model=\"formData.Outcome2\" id=\"Outcome1\">\n	</div>\n\n	<div class=\"control-group\">\n	  	<label class=\"control-label\" for=\"Outcome3\">目标3</label>\n	  	<input type=\"text\" ng-model=\"formData.Outcome3\" id=\"Outcome1\">\n	</div>\n\n	<div class=\"control-group\">\n	  	<label class=\"control-label\" for=\"detail\">主要内容</label>\n	  	<textarea ng-model=\"formData.Detail\" rows=\"5\" id=\"Detail\"></textarea>\n	</div>\n\n	<div class=\"control-group\">\n	  	<label class=\"control-label\" for=\"reference\">参考文献</label>\n	  	<textarea ng-model=\"formData.Reference\" rows=\"5\" id=\"reference\"></textarea>\n	</div>\n\n	<div class=\"control-group\">\n	  	<label class=\"control-label\" for=\"schedule\">进度安排</label>\n	  	<textarea ng-model=\"formData.Schedule\" rows=\"5\" id=\"schedule\"></textarea>\n	</div>\n	<input type=\"submit\" value=\"提交\" ng-click=\"submit(formData)\">\n</form>");
+angular.module("app").run(["$templateCache", function($templateCache) {$templateCache.put("pages/admin.html","<div class=\"row\">\n    <div class=\"col-md-3 page-left-sidebar\">\n		<h4 class=\"text-center\">功能列表</h4>\n	  	<div class=\"list-group\">\n			<button type=\"button\" class=\"list-group-item\" ng-click=\"changeUpload()\">导入文件</button>\n			<button type=\"button\" class=\"list-group-item\" ng-click=\"changeAssign()\">分配专家</button>\n			<button type=\"button\" class=\"list-group-item\" ng-click=\"changeDeadline()\">截止时间</button>\n			<button type=\"button\" class=\"list-group-item\" ng-click=\"changeBlind()\">抽取盲审</button>\n		</div>\n    </div>\n    <div ng-if=\"type === \'upload\'\" class=\"col-xs-9 page-right\">\n    	<div>\n    		<form method=\"post\" action=\"/assign/upload\">\n    			<label>导入学生文件</label>\n    			<input type=\"file\" name=\"students\">\n    			<label>导入学生文件</label>\n    			<input type=\"file\" name=\"teachers\">\n    			<button type=\"submit\">提交文件</button>\n    		</form>\n    		\n    	</div>\n    </div>\n    <div ng-if=\"type === \'assign\'\" class=\"col-xs-9 page-right\">\n       	<div>\n       		<form method=\"post\" action=\"/assign/assignExperts\">\n	       		<div ng-repeat=\"teacher in teacherList\">\n	       			<input type=\"checkbox\" value={{teacher.id}}>\n	       			<label>{{teacher.name}}</label>\n	       		</div>\n	       		<button type=\"submit\">提交</button>\n	       	</form>\n       	</div>\n    </div>\n    <div ng-if=\"type === \'deadline\'\" class=\"col-xs-9 page-right\">\n	    <form method=\"post\" action=\"/assign/deadlines\">\n	    	<div>\n	       		<label>任务书截止时间</label>\n	       		<input type=\"date\" name=\"taskDeadline\">\n	       	</div>\n	       	<div>\n	       		<label>审核截止时间</label>\n	       		<input type=\"date\" name=\"reviewDeadline\">\n	       	</div>\n	       	<button type=\"submit\">提交</button>\n	    </form>\n    </div>\n    <div ng-if=\"type === \'blind\'\" class=\"col-xs-9 page-right\">\n       	<div>\n       		<form method=\"post\" action=\"/assign/blind\">\n       			<label>请输入盲审后四位学号</label>\n	       		<input type=\"text\" name=\"lastNumber\">\n	       		<button type=\"submit\">提交</button>\n       		</form>\n       	</div>\n    </div>\n</div>");
+$templateCache.put("pages/reviewDetail.html","<form class=\"form-horizontal\">\n\n	<div class=\"control-group center-block\">\n	  	<label class=\"control-label\" for=\"teacherName\">指导老师姓名</label>\n	  	<input type=\"text\" disabled ng-model=\"formData.Teacher\"id=\"teacherName\">\n	</div>\n\n	<div class=\"control-group\">\n	  	<label class=\"control-label\" for=\"academicTitle\">指导老师职称</label>\n	  	<input type=\"text\" disabled ng-model=\"formData.AcademicTitle\" id=\"academicTitle\">\n	</div>\n\n	<div class=\"control-group\">\n	  	<label class=\"control-label\" for=\"affiliation\">指导老师学院</label>\n	  	<input type=\"text\" disabled ng-model=\"formData.Affiliation\" id=\"affiliation\">\n	</div>\n\n	<div class=\"control-group\">\n	  	<label class=\"control-label\" for=\"teacherPhone\">指导老师电话</label>\n	  	<input type=\"text\"  disabled ng-model=\"formData.TeacherPhone\" id=\"teacherPhone\">\n	</div>\n\n	<div class=\"control-group\">\n	  	<label class=\"control-label\" for=\"teacherEmail\">指导老师邮箱</label>\n	  	<input type=\"text\" disabled ng-model=\"formData.TeacherEmail\" id=\"teacherEmail\">\n	</div>\n\n	<div class=\"control-group\">\n	  	<label class=\"control-label\" for=\"studentID\">学号</label>\n	  	<input type=\"text\" disabled ng-model=\"formData.StudentID\" id=\"studentID\">\n	</div>\n\n	<div class=\"control-group\">\n	  	<label class=\"control-label\" for=\"studentName\">学生姓名</label>\n	  	<input type=\"text\" disabled ng-model=\"formData.Name\" id=\"studentName\">\n	</div>\n\n	<div class=\"control-group\">\n	  	<label class=\"control-label\" for=\"grade\">年级</label>\n	  	<input type=\"text\" disabled ng-model=\"formData.Grade\" id=\"grade\">\n	</div>\n\n	<div class=\"control-group\">\n	  	<label class=\"control-label\" for=\"major\">专业</label>\n	  	<input type=\"text\" disabled ng-model=\"formData.Major\" id=\"major\">\n	</div>\n\n	<div class=\"control-group\">\n	  	<label class=\"control-label\" for=\"class\">班级</label>\n	  	<input type=\"text\" disabled ng-model=\"formData.Class\" id=\"class\">\n	</div>\n\n	<div class=\"control-group\">\n	  	<label class=\"control-label\" for=\"studentPhone\">学生电话</label>\n	  	<input type=\"text\" disabled ng-model=\"formData.StudentPhone\" id=\"studentPhone\">\n	</div>\n\n	<div class=\"control-group\">\n	  	<label class=\"control-label\" for=\"Title\">论文题目名</label>\n	  	<input type=\"text\" disabled ng-model=\"formData.Title\" id=\"Title\">\n	</div>\n	<div class=\"control-group\">\n	  	<label class=\"control-label\" for=\"EnglishTitle\">论文英文题目</label>\n	  	<input type=\"text\" disabled ng-model=\"formData.EnglishTitle\" id=\"EnglishTitle\">\n	</div>\n\n\n	<div class=\"control-group\">\n		<label class=\"control-label\" for=\"type1\">种类1</label>\n		<select disabled ng-model=\"formData.Type1\" ng-options=\"m.id as m.name for m in selectType1\">\n    		<option value=\"\">-- 请选择 --</option>\n		</select>\n	</div>\n\n	<div class=\"control-group\">\n		<label class=\"control-label\" for=\"type1\">种类2</label>\n		<select disabled ng-model=\"formData.Type2\" ng-options=\"m.id as m.name for m in selectType2\">\n    		<option value=\"\">-- 请选择 --</option>\n		</select>\n	</div>\n\n	<div class=\"control-group\">\n		<label class=\"control-label\" for=\"type1\">种类3</label>\n		<select disabled ng-model=\"formData.Type3\" ng-options=\"m.id as m.name for m in selectType3\">\n    		<option value=\"\">-- 请选择 --</option>\n		</select>\n	</div>\n\n	<div class=\"control-group\">\n		<label class=\"control-label\" for=\"type1\">种类4</label>\n		<select disabled ng-model=\"formData.Type4\" ng-options=\"m.id as m.name for m in selectType4\">\n    		<option value=\"\">-- 请选择 --</option>\n		</select>\n	</div>\n\n	<div class=\"control-group\">\n	  	<label class=\"control-label\" for=\"task1\">任务1</label>\n	  	<input type=\"text\" disabled ng-model=\"formData.Task1\" id=\"task1\">\n	</div>\n	<div class=\"control-group\">\n	  	<label class=\"control-label\" for=\"task2\">任务2</label>\n	  	<input type=\"text\" disabled ng-model=\"formData.Task2\" id=\"task2\">\n	</div>\n	<div class=\"control-group\">\n	  	<label class=\"control-label\" for=\"task3\">任务3</label>\n	  	<input type=\"text\" disabled ng-model=\"formData.Task3\" id=\"task3\">\n	</div>\n\n	<div class=\"control-group\">\n	  	<label class=\"control-label\" for=\"Outcome1\">目标1</label>\n	  	<input type=\"text\" disabled ng-model=\"formData.Outcome1\" id=\"Outcome1\">\n	</div>\n\n	<div class=\"control-group\">\n	  	<label class=\"control-label\" for=\"Outcome2\">目标2</label>\n	  	<input type=\"text\" disabled ng-model=\"formData.Outcome2\" id=\"Outcome1\">\n	</div>\n\n	<div class=\"control-group\">\n	  	<label class=\"control-label\" for=\"Outcome3\">目标3</label>\n	  	<input type=\"text\" disabled ng-model=\"formData.Outcome3\" id=\"Outcome1\">\n	</div>\n\n	<div class=\"control-group\">\n	  	<label class=\"control-label\" for=\"detail\">主要内容</label>\n	  	<textarea ng-model=\"formData.Detail\" disabled rows=\"5\" id=\"Detail\"></textarea>\n	</div>\n\n	<div class=\"control-group\">\n	  	<label class=\"control-label\" for=\"reference\">参考文献</label>\n	  	<textarea ng-model=\"formData.Reference\" disabled rows=\"5\" id=\"reference\"></textarea>\n	</div>\n\n	<div class=\"control-group\">\n	  	<label class=\"control-label\" for=\"schedule\">进度安排</label>\n	  	<textarea ng-model=\"formData.Schedule\" disabled rows=\"5\" id=\"schedule\"></textarea>\n	</div>\n\n	<div class=\"control-group\">\n	  	<label class=\"control-label\" for=\"schedule\">修改意见</label>\n	  	<textarea ng-model=\"formData.Review\"  rows=\"5\" id=\"schedule\"></textarea>\n	</div>\n\n	<button ng-click=\"submit(formData)\">通过</button>\n	<button ng-click=\"nopass()\">不通过</button>\n</form>");
+$templateCache.put("pages/reviews.html","<div class=\"row\">\n  <div class=\"col-md-3 page-left-sidebar\">\n	<h4 class=\"text-center\">审核列表</h4>\n  	<div class=\"list-group\">\n		<button type=\"button\" class=\"list-group-item\">未审核</button>\n		<button type=\"button\" class=\"list-group-item\">已通过</button>\n		<button type=\"button\" class=\"list-group-item\">未通过</button>\n	</div>\n  </div>\n  <div class=\"col-xs-9 page-right\">\n        <table class=\"table\">\n            <thead>\n                <th>姓名</th>\n                <th>论文题目</th>\n                <th>指导老师</th>\n                <th>审核专家</th>\n                <th>提交时间</th>\n                <th>审核时间</th>\n                <th>审核状态</th>\n                <td>操作</td>\n            </thead>\n            <tbody>\n                <tr ng-repeat=\"reviewStudent in reviewStudents\">\n                <td>{{reviewStudent.Name}}</td>\n                <td>{{reviewStudent.Title}}</td>\n                <td>{{reviewStudent.Teacher}}</td>\n                <td>{{reviewStudent.Expert}}</td>\n                <td>{{reviewStudent.submitTime}}</td>\n                <td>{{reviewStudent.reviewTime}}</td>\n                <td>{{reviewStudent.reviewStatus}}</td>\n                <td>\n                    <a href=\"#/review/{{reviewStudent.ID}}\" ng-if=\"student.reviewStatus !== \'通过\'\">查看</a>\n                    \n                </td>\n                </tr>\n            </tbody>\n        </table>\n  </div>\n</div>");
+$templateCache.put("pages/studentDetail.html","<form class=\"form-horizontal\">\n\n	<div class=\"control-group center-block\">\n	  	<label class=\"control-label\" for=\"teacherName\">指导老师姓名</label>\n	  	<input type=\"text\" ng-model=\"formData.Teacher\"id=\"teacherName\">\n	</div>\n\n	<div class=\"control-group\">\n	  	<label class=\"control-label\" for=\"academicTitle\">指导老师职称</label>\n	  	<input type=\"text\" ng-model=\"formData.AcademicTitle\" id=\"academicTitle\">\n	</div>\n\n	<div class=\"control-group\">\n	  	<label class=\"control-label\" for=\"affiliation\">指导老师学院</label>\n	  	<input type=\"text\" ng-model=\"formData.Affiliation\" id=\"affiliation\">\n	</div>\n\n	<div class=\"control-group\">\n	  	<label class=\"control-label\" for=\"teacherPhone\">指导老师电话</label>\n	  	<input type=\"text\" ng-model=\"formData.TeacherPhone\" id=\"teacherPhone\">\n	</div>\n\n	<div class=\"control-group\">\n	  	<label class=\"control-label\" for=\"teacherEmail\">指导老师邮箱</label>\n	  	<input type=\"text\" ng-model=\"formData.TeacherEmail\" id=\"teacherEmail\">\n	</div>\n\n	<div class=\"control-group\">\n	  	<label class=\"control-label\" for=\"studentID\">学号</label>\n	  	<input type=\"text\" ng-model=\"formData.StudentID\" id=\"studentID\">\n	</div>\n\n	<div class=\"control-group\">\n	  	<label class=\"control-label\" for=\"studentName\">学生姓名</label>\n	  	<input type=\"text\" ng-model=\"formData.Name\" id=\"studentName\">\n	</div>\n\n	<div class=\"control-group\">\n	  	<label class=\"control-label\" for=\"grade\">年级</label>\n	  	<input type=\"text\" ng-model=\"formData.Grade\" id=\"grade\">\n	</div>\n\n	<div class=\"control-group\">\n	  	<label class=\"control-label\" for=\"major\">专业</label>\n	  	<input type=\"text\" ng-model=\"formData.Major\" id=\"major\">\n	</div>\n\n	<div class=\"control-group\">\n	  	<label class=\"control-label\" for=\"class\">班级</label>\n	  	<input type=\"text\" ng-model=\"formData.Class\" id=\"class\">\n	</div>\n\n	<div class=\"control-group\">\n	  	<label class=\"control-label\" for=\"studentPhone\">学生电话</label>\n	  	<input type=\"text\" ng-model=\"formData.StudentPhone\" id=\"studentPhone\">\n	</div>\n\n	<div class=\"control-group\">\n	  	<label class=\"control-label\" for=\"Title\">论文题目名</label>\n	  	<input type=\"text\" ng-model=\"formData.Title\" id=\"Title\">\n	</div>\n	<div class=\"control-group\">\n	  	<label class=\"control-label\" for=\"EnglishTitle\">论文英文题目</label>\n	  	<input type=\"text\" ng-model=\"formData.EnglishTitle\" id=\"EnglishTitle\">\n	</div>\n\n	<div class=\"control-group\">\n		<label class=\"control-label\" for=\"type1\">种类1</label>\n		<select ng-model=\"formData.Type1\" ng-options=\"m.id as m.name for m in selectType1\">\n    		<option value=\"\">-- 请选择 --</option>\n		</select>\n	</div>\n\n	<div class=\"control-group\">\n		<label class=\"control-label\" for=\"type1\">种类2</label>\n		<select ng-model=\"formData.Type2\" ng-options=\"m.id as m.name for m in selectType2\">\n    		<option value=\"\">-- 请选择 --</option>\n		</select>\n	</div>\n\n	<div class=\"control-group\">\n		<label class=\"control-label\" for=\"type1\">种类3</label>\n		<select ng-model=\"formData.Type3\" ng-options=\"m.id as m.name for m in selectType3\">\n    		<option value=\"\">-- 请选择 --</option>\n		</select>\n	</div>\n\n	<div class=\"control-group\">\n		<label class=\"control-label\" for=\"type1\">种类4</label>\n		<select ng-model=\"formData.Type4\" ng-options=\"m.id as m.name for m in selectType4\">\n    		<option value=\"\">-- 请选择 --</option>\n		</select>\n	</div>\n\n	<div class=\"control-group\">\n	  	<label class=\"control-label\" for=\"task1\">任务1</label>\n	  	<input type=\"text\" ng-model=\"formData.Task1\" id=\"task1\">\n	</div>\n	<div class=\"control-group\">\n	  	<label class=\"control-label\" for=\"task2\">任务2</label>\n	  	<input type=\"text\" ng-model=\"formData.Task2\" id=\"task2\">\n	</div>\n	<div class=\"control-group\">\n	  	<label class=\"control-label\" for=\"task3\">任务3</label>\n	  	<input type=\"text\" ng-model=\"formData.Task3\" id=\"task3\">\n	</div>\n\n	<div class=\"control-group\">\n	  	<label class=\"control-label\" for=\"Outcome1\">目标1</label>\n	  	<input type=\"text\" ng-model=\"formData.Outcome1\" id=\"Outcome1\">\n	</div>\n\n	<div class=\"control-group\">\n	  	<label class=\"control-label\" for=\"Outcome2\">目标2</label>\n	  	<input type=\"text\" ng-model=\"formData.Outcome2\" id=\"Outcome1\">\n	</div>\n\n	<div class=\"control-group\">\n	  	<label class=\"control-label\" for=\"Outcome3\">目标3</label>\n	  	<input type=\"text\" ng-model=\"formData.Outcome3\" id=\"Outcome1\">\n	</div>\n\n	<div class=\"control-group\">\n	  	<label class=\"control-label\" for=\"detail\">主要内容</label>\n	  	<textarea ng-model=\"formData.Detail\" rows=\"5\" id=\"Detail\"></textarea>\n	</div>\n\n	<div class=\"control-group\">\n	  	<label class=\"control-label\" for=\"reference\">参考文献</label>\n	  	<textarea ng-model=\"formData.Reference\" rows=\"5\" id=\"reference\"></textarea>\n	</div>\n\n	<div class=\"control-group\">\n	  	<label class=\"control-label\" for=\"schedule\">进度安排</label>\n	  	<textarea ng-model=\"formData.Schedule\" rows=\"5\" id=\"schedule\"></textarea>\n	</div>\n	<input type=\"submit\" value=\"提交\" ng-click=\"submit(formData)\">\n</form>");
 $templateCache.put("pages/students.html","<div class=\"row\">\n  <div class=\"col-md-3 page-left-sidebar\">\n	<h4 class=\"text-center\">学生列表</h4>\n  	<div class=\"list-group\">\n		<button type=\"button\" class=\"list-group-item\">未审核</button>\n		<button type=\"button\" class=\"list-group-item\">已通过</button>\n		<button type=\"button\" class=\"list-group-item\">未通过</button>\n	</div>\n  </div>\n  <div class=\"col-xs-9 page-right\">\n        <table class=\"table\">\n            <thead>\n                <th>姓名</th>\n                <th>指导老师</th>\n                <th>论文题目</th>\n                <th>提交时间</th>\n                <th>审核人</th>\n                <th>审核状态</th>\n                <td>操作</td>\n            </thead>\n            <tbody>\n                <tr ng-repeat=\"student in students\">\n                <td>{{student.Name}}</td>\n                <td>{{student.Teacher}}</td>\n                <td>{{student.Title}}</td>\n                <td>{{student.submitTime}}</td>\n                <td>{{student.Expert}}</td>\n                <td>{{student.reviewStatus}}</td>\n                <td>\n                    <a href=\"#/student/{{student.ID}}\" ng-if=\"student.Expert === \'\'\">查看</a>\n                    <a href=\"#/student/{{student.ID}}\" ng-if=\"student.Expert !== \'\'\">不查看</a>\n                </td>\n                </tr>\n            </tbody>\n        </table>\n  </div>\n</div>\n");
-$templateCache.put("directives/nav/mainNav.html","<nav class=\"navbar navbar-default navbar-fixed-top\">\n	<div class=\"navbar-content\">\n		<div class=\"navbar-header\">\n			<a class=\"navbar-brand\" href=\"#/\">本科毕设</a>\n		</div>\n		<ul class=\"nav navbar-nav navbar-main-nav\">\n			<li><a href=\"#/students\">学生管理</a></li>\n			<li><a href=\"#/reviews\">评审管理</a></li>\n		</ul>\n		<ul class=\"nav navbar-nav navbar-right\">\n			<li><a>{{user.UserName}}</a></li>\n			<li><a href=\"/accounts/logout\">Logout</a></li>\n		</ul>\n	</div>\n	\n</nav>");}]);
+$templateCache.put("directives/nav/mainNav.html","<nav class=\"navbar navbar-default navbar-fixed-top\">\n	<div class=\"navbar-content\">\n		<div class=\"navbar-header\">\n			<a class=\"navbar-brand\" href=\"\">本科毕设</a>\n		</div>\n		<ul class=\"nav navbar-nav navbar-main-nav\">\n			<li><a ng-if=\"user.Teacher === true\" href=\"#/students\">学生管理</a></li>\n			<li><a ng-if=\"user.Expert === true\" href=\"#/reviews\">评审管理</a></li>\n			<li><a ng-if=\"user.Admin === true\" href=\"#/admin\">管理</a></li>\n		</ul>\n		<ul class=\"nav navbar-nav navbar-right\">\n			<li><a>{{user.UserName}}</a></li>\n			<li><a href=\"/accounts/logout\">Logout</a></li>\n		</ul>\n	</div>	\n</nav> ");}]);

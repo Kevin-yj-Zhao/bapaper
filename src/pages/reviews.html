@@ -11,8 +11,9 @@
         <table class="table">
             <thead>
                 <th>姓名</th>
-                <th>手机号</th>
+                <th>论文题目</th>
                 <th>指导老师</th>
+                <th>审核专家</th>
                 <th>提交时间</th>
                 <th>审核时间</th>
                 <th>审核状态</th>
@@ -20,15 +21,16 @@
             </thead>
             <tbody>
                 <tr ng-repeat="reviewStudent in reviewStudents">
-                <td>{{reviewStudent.name}}</td>
-                <td>{{reviewStudent.phone}}</td>
-                <td>{{reviewStudent.teacherName}}</td>
+                <td>{{reviewStudent.Name}}</td>
+                <td>{{reviewStudent.Title}}</td>
+                <td>{{reviewStudent.Teacher}}</td>
+                <td>{{reviewStudent.Expert}}</td>
                 <td>{{reviewStudent.submitTime}}</td>
                 <td>{{reviewStudent.reviewTime}}</td>
                 <td>{{reviewStudent.reviewStatus}}</td>
                 <td>
-                    <a href="#/review/{{reviewStudent.studentId}}" ng-if="student.reviewStatus === '未通过'">查看</a>
-                    <a href="#/review/{{reviewStudent.studentId}}" ng-if="student.reviewStatus !== '未通过'">不查看</a>
+                    <a href="#/review/{{reviewStudent.ID}}" ng-if="student.reviewStatus !== '通过'">查看</a>
+                    
                 </td>
                 </tr>
             </tbody>

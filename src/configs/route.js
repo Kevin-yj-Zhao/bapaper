@@ -17,9 +17,9 @@ app.config(['$routeProvider',
 				templateUrl:'pages/reviewDetail.html',
 				controller: 'ReviewDetailCtrl'
 			}).
-			when('/login', {
-				templateUrl: 'pages/login.html',
-				controller:'LoginCtrl'
+			when('/admin', {
+				templateUrl: 'pages/admin.html',
+				controller:'AdminCtrl'
 			}).
 			otherwise({
 				redirectTo:'/students'
