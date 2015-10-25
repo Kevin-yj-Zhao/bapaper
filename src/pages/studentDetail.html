@@ -6,6 +6,16 @@
 	</div>
 
 	<div class="control-group">
+	  	<label class="control-label" for="academicTitle">指导老师职称</label>
+	  	<input type="text" ng-model="formData.AcademicTitle" id="academicTitle">
+	</div>
+
+	<div class="control-group">
+	  	<label class="control-label" for="affiliation">指导老师学院</label>
+	  	<input type="text" ng-model="formData.Affiliation" id="affiliation">
+	</div>
+
+	<div class="control-group">
 	  	<label class="control-label" for="teacherPhone">指导老师电话</label>
 	  	<input type="text" ng-model="formData.TeacherPhone" id="teacherPhone">
 	</div>
@@ -16,12 +26,32 @@
 	</div>
 
 	<div class="control-group">
+	  	<label class="control-label" for="studentID">学号</label>
+	  	<input type="text" ng-model="formData.StudentID" id="studentID">
+	</div>
+
+	<div class="control-group">
 	  	<label class="control-label" for="studentName">学生姓名</label>
 	  	<input type="text" ng-model="formData.Name" id="studentName">
 	</div>
 
 	<div class="control-group">
-	  	<label class="control-label" for="studentName">学生姓名</label>
+	  	<label class="control-label" for="grade">年级</label>
+	  	<input type="text" ng-model="formData.Grade" id="grade">
+	</div>
+
+	<div class="control-group">
+	  	<label class="control-label" for="major">专业</label>
+	  	<input type="text" ng-model="formData.Major" id="major">
+	</div>
+
+	<div class="control-group">
+	  	<label class="control-label" for="class">班级</label>
+	  	<input type="text" ng-model="formData.Class" id="class">
+	</div>
+
+	<div class="control-group">
+	  	<label class="control-label" for="studentPhone">学生电话</label>
 	  	<input type="text" ng-model="formData.StudentPhone" id="studentPhone">
 	</div>
 
@@ -63,8 +93,18 @@
 	</div>
 
 	<div class="control-group">
-	  	<label class="control-label" for="review">主要内容</label>
-	  	<textarea ng-model="formData.Review" rows="5" id="review"></textarea>
+	  	<label class="control-label" for="detail">主要内容</label>
+	  	<textarea ng-model="formData.Detail" rows="5" id="Detail"></textarea>
+	</div>
+
+	<div class="control-group">
+	  	<label class="control-label" for="reference">参考文献</label>
+	  	<textarea ng-model="formData.Reference" rows="5" id="reference"></textarea>
+	</div>
+
+	<div class="control-group">
+	  	<label class="control-label" for="schedule">进度安排</label>
+	  	<textarea ng-model="formData.Schedule" rows="5" id="schedule"></textarea>
 	</div>
 	<input type="submit" value="提交" ng-click="submit(formData)">
 </form>

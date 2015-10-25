@@ -83,7 +83,6 @@ function scripts() {
     return merge(scriptFiles, template)
         .pipe(order(staticFiles.scripts.concat([
             SRC + 'app.js',
-            SRC + 'ngImgCrop/ng-img-crop.js',
             SRC + '**/*.js',
             'templates.js'
         ]), {
