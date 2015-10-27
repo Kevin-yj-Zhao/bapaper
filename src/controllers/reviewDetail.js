@@ -7,7 +7,35 @@ app.controller('ReviewDetailCtrl',[
 		$http.get(url)
 			.success(function(data) {
 				$scope.formData = data;
+				var csrfmiddlewaretoken = document.getElementsByName('csrfmiddlewaretoken')[0].value;
+				$scope.formData.csrfmiddlewaretoken = csrfmiddlewaretoken;
 			});
+
+		$scope.submit = function(data) {
+			$scope.formData = data;
+			$scope.formData.Status = 1;
+			$http({
+				method: 'POST',
+				url: url,
+				data: $.param($scope.formData),
+				headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded'
+				}
+			});
+		}
+
+		$scope.nopass = function(data) {
+			$scope.formData = data;
+			$scope.formData.Status = 2;
+			$http({
+				method: 'POST',
+				url: url,
+				data: $.param($scope.formData),
+				headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded'
+				}
+			});
+		}
 
 
 				$scope.selectType1 = [{
