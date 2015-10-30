@@ -2,10 +2,11 @@
   <div class="col-md-3 page-left-sidebar">
 	<h4 class="text-center">学生列表</h4>
   	<div class="list-group">
-		<button type="button" class="list-group-item">未审核</button>
-		<button type="button" class="list-group-item">已通过</button>
-		<button type="button" class="list-group-item">未通过</button>
-	</div>
+        <button type="button" class="list-group-item" ng-click="allStudentsBtn()">全部学生</button>
+        <button type="button" class="list-group-item" ng-click="unReviewBtn()">未审核</button>
+        <button type="button" class="list-group-item" ng-click="passedBtn()">已通过</button>
+        <button type="button" class="list-group-item" ng-click="unPassedBtn()">未通过</button>
+    </div>
   </div>
   <div class="col-xs-9 page-right">
         <table class="table">

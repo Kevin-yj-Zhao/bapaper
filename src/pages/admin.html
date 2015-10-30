@@ -10,46 +10,58 @@
     </div>
     <div ng-if="type === 'upload'" class="col-xs-9 page-right">
     	<div>
-    		<form method="post" action="/assign/upload">
+    		<form>
     			<label>导入学生文件</label>
-    			<input type="file" name="students">
+    			<input type="file" name="students" ng-model="formData_upload.students">
     			<label>导入学生文件</label>
-    			<input type="file" name="teachers">
-    			<button type="submit">提交文件</button>
+    			<input type="file" name="teachers" ng-model="formData_upload.teachers">
+    			<button ng-click="submitUpload(formData_upload)">提交文件</button>
     		</form>
     		
     	</div>
     </div>
     <div ng-if="type === 'assign'" class="col-xs-9 page-right">
-       	<div>
-       		<form method="post" action="/assign/assignExperts">
-	       		<div ng-repeat="teacher in teacherList">
-	       			<input type="checkbox" value={{teacher.id}}>
-	       			<label>{{teacher.name}}</label>
-	       		</div>
-	       		<button type="submit">提交</button>
-	       	</form>
+       	<div >
+            <table class="table">
+                <thead>
+                    <th>方向</th>
+                    <th>老师姓名</th>
+                    <th>所在导师组</th>
+                    <th>是否为专家</th>
+                    <td>操作</td>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="teacher in teacherList">
+                      <td>{{teacher.Category}}</td>
+                      <td>{{teacher.Name}}</td>
+                      <td>{{teacher.isExpert}}</td>
+                      <td>{{teacher.Team}}</td>
+                      <td><input type="checkbox" value={{teacher.TeacherID}}></td>
+                    </tr>
+                </tbody>
+	       		  <button type="submit">提交名单</button>
+            </table>
        	</div>
     </div>
     <div ng-if="type === 'deadline'" class="col-xs-9 page-right">
-	    <form method="post" action="/assign/deadlines">
+	    <form>
 	    	<div>
 	       		<label>任务书截止时间</label>
-	       		<input type="date" name="taskDeadline">
+	       		<input type="date" name="taskDeadline" required ng-model="formData_deadline.taskDeadline">
 	       	</div>
 	       	<div>
 	       		<label>审核截止时间</label>
-	       		<input type="date" name="reviewDeadline">
+	       		<input type="date" name="reviewDeadline" required ng-model="formData_deadline.reviewDeadline">
 	       	</div>
-	       	<button type="submit">提交</button>
+	       	<button ng-click="submitDeadline(formData_deadline)">提交截止时间</button>
 	    </form>
     </div>
     <div ng-if="type === 'blind'" class="col-xs-9 page-right">
        	<div>
-       		<form method="post" action="/assign/blind">
-       			<label>请输入盲审后四位学号</label>
-	       		<input type="text" name="lastNumber">
-	       		<button type="submit">提交</button>
+       		<form>
+       			<label>请输入盲审后一位学号</label>
+	       		<input type="text" name="lastNumber" ng-model="formData_blind.lastNumber">
+	       		<button ng-click="submitBlind(formData_blind)">提交</button>
        		</form>
        	</div>
     </div>
