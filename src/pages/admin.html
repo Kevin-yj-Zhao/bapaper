@@ -36,10 +36,10 @@
                       <td>{{teacher.Name}}</td>
                       <td>{{teacher.isExpert}}</td>
                       <td>{{teacher.Team}}</td>
-                      <td><input type="checkbox" value={{teacher.TeacherID}}></td>
+                      <td><input type="checkbox" ng-model="teacher.type"></td>
                     </tr>
                 </tbody>
-	       		  <button type="submit">提交名单</button>
+	       		  <button ng-click="submitTeacherList()">提交名单</button>
             </table>
        	</div>
     </div>

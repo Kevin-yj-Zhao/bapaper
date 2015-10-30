@@ -45,6 +45,36 @@ app.controller('AdminCtrl',[
 		}
 
 
+		$scope.submitTeacherList = function() {
+			var teacherIDList = [];
+			var len = $scope.teacherList.length;
+			for (var i=0; i<len; i++) {
+				if ($scope.teacherList[i].type === true) {
+					teacherIDList.push($scope.teacherList[i].TeacherID);
+				}
+			}
+			var data = {
+				csrfmiddlewaretoken: csrfmiddlewaretoken,
+				teacherIDList: teacherIDList
+			}
+			$http({
+				method: 'POST',
+				url: 'assign/set_experts',
+				data: $.param(data),
+				headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded'
+				}
+			}).success(function(data) {
+				if (data) {
+					//是否需要重新刷新页面，理论上时需要重新刷新页面的
+					alert('提交成功！~');
+				}
+			}).error(function() {
+				alert('对不起，没有提交成功！~');
+			});
+		}
+
+
 		$scope.submitUpload = function(data) {
 			data.csrfmiddlewaretoken = csrfmiddlewaretoken;
 			$http({
@@ -74,6 +104,8 @@ app.controller('AdminCtrl',[
 				if (data) {
 					alert('提交成功！~');
 				}
+			}).error(function() {
+				alert('对不起，没有提交成功！~');
 			});
 		}
 
@@ -92,7 +124,7 @@ app.controller('AdminCtrl',[
 				}
 			}).error(function() {
 				alert('对不起，没有提交成功！~');
-			})
+			});
 		}
 	}
 ]);
