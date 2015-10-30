@@ -13,7 +13,7 @@
     		<form>
     			<label>导入学生文件</label>
     			<input type="file" name="students" ng-model="formData_upload.students">
-    			<label>导入学生文件</label>
+    			<label>导入老师文件</label>
     			<input type="file" name="teachers" ng-model="formData_upload.teachers">
     			<button ng-click="submitUpload(formData_upload)">提交文件</button>
     		</form>
@@ -34,8 +34,8 @@
                     <tr ng-repeat="teacher in teacherList">
                       <td>{{teacher.Category}}</td>
                       <td>{{teacher.Name}}</td>
-                      <td>{{teacher.isExpert}}</td>
                       <td>{{teacher.Team}}</td>
+                      <td>{{teacher.isExpert}}</td>
                       <td><input type="checkbox" ng-model="teacher.type"></td>
                     </tr>
                 </tbody>
