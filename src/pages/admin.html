@@ -6,6 +6,7 @@
 			<button type="button" class="list-group-item" ng-click="changeAssign()">分配专家</button>
 			<button type="button" class="list-group-item" ng-click="changeDeadline()">截止时间</button>
 			<button type="button" class="list-group-item" ng-click="changeBlind()">抽取盲审</button>
+      <button type="button" class="list-group-item" ng-click="changeDefense()">分组和答辩</button>
 		</div>
     </div>
     <div ng-if="type === 'upload'" class="col-xs-9 page-right">
@@ -24,19 +25,19 @@
        	<div >
             <table class="table">
                 <thead>
+                    <th>教师工号</th>
+                    <th>姓名</th>
                     <th>方向</th>
-                    <th>老师姓名</th>
                     <th>所在导师组</th>
-                    <th>是否为专家</th>
                     <td>操作</td>
                 </thead>
                 <tbody>
                     <tr ng-repeat="teacher in teacherList">
+                      <td>{{teacher.TeacherID}}</td>
+                      <td>{{teacher.Name}}
                       <td>{{teacher.Category}}</td>
-                      <td>{{teacher.Name}}</td>
                       <td>{{teacher.Team}}</td>
-                      <td>{{teacher.isExpert}}</td>
-                      <td><input type="checkbox" ng-model="teacher.type"></td>
+                      <td><input type="checkbox" ng-model="teacher.isExpert" ng-checked={{teacher.isExpert}} value={{teacher.isExpert}}></td>
                     </tr>
                 </tbody>
 	       		  <button ng-click="submitTeacherList()">提交名单</button>
@@ -64,5 +65,14 @@
 	       		<button ng-click="submitBlind(formData_blind)">提交</button>
        		</form>
        	</div>
+    </div>
+    <div ng-if="type === 'defense'" class="col-xs-9 page-right">
+        <div>
+          <button id="buttonExpert" ng-click="assignExpert()">专家分组</button>
+          <button id="buttonDefense" ng-click="assignDefense()">交叉答辩</button>
+          <div id="waiting" style="visibility: hidden;">
+            运行中...
+          </div>
+        </div>
     </div>
 </div>

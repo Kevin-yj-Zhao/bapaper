@@ -44,12 +44,16 @@ app.controller('AdminCtrl',[
 			$scope.type = 'blind';
 		}
 
+		$scope.changeDefense = function() {
+			$scope.type = 'defense';
+		}
+
 
 		$scope.submitTeacherList = function() {
 			var teacherIDList = [];
 			var len = $scope.teacherList.length;
 			for (var i=0; i<len; i++) {
-				if ($scope.teacherList[i].type === true) {
+				if ($scope.teacherList[i].isExpert === true) {
 					teacherIDList.push($scope.teacherList[i].TeacherID);
 				}
 			}
@@ -124,6 +128,60 @@ app.controller('AdminCtrl',[
 				}
 			}).error(function() {
 				alert('对不起，没有提交成功！~');
+			});
+		}
+
+		$scope.assignExpert = function() {
+			var data = {csrfmiddlewaretoken: csrfmiddlewaretoken};
+			document.getElementById("buttonExpert").disabled = true;
+			document.getElementById("buttonDefense").disabled = true;
+			document.getElementById("waiting").style.visibility="visible";
+			$http({
+				method: 'POST',
+				url: 'assign/assign',
+				data: $.param(data),
+				headers: {
+					'Content-Type': 'application/x-www-form-urlencoded'
+				}
+			}).success(function(data) {
+				if (data) {
+					document.getElementById("buttonExpert").disabled = false;
+					document.getElementById("buttonDefense").disabled = false;
+					document.getElementById("waiting").style.visibility="hidden";
+					alert('专家分组成功！');
+				}
+			}).error(function() {
+				document.getElementById("buttonExpert").disabled = false;
+				document.getElementById("buttonDefense").disabled = false;
+				document.getElementById("waiting").style.visibility="hidden";
+				alert('对不起，没有分组成功！~');
+			});
+		}
+
+		$scope.assignDefense = function() {
+			var data = {csrfmiddlewaretoken: csrfmiddlewaretoken};
+			document.getElementById("buttonExpert").disabled = true;
+			document.getElementById("buttonDefense").disabled = true;
+			document.getElementById("waiting").style.visibility="visible";
+			$http({
+				method: 'POST',
+				url: 'assign/defense',
+				data: $.param(data),
+				headers: {
+					'Content-Type': 'application/x-www-form-urlencoded'
+				}
+			}).success(function(data) {
+				if (data) {
+					document.getElementById("buttonExpert").disabled = false;
+					document.getElementById("buttonDefense").disabled = false;
+					document.getElementById("waiting").style.visibility="hidden";
+					alert('答辩分配成功！');
+				}
+			}).error(function() {
+				document.getElementById("buttonExpert").disabled = false;
+				document.getElementById("buttonDefense").disabled = false;
+				document.getElementById("waiting").style.visibility="hidden";
+				alert('对不起，没有分配成功！~');
 			});
 		}
 	}
