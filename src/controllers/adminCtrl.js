@@ -2,23 +2,26 @@ app.controller('AdminCtrl',[
 	'$scope',
 	'$http',
 	function($scope, $http) {
+		var csrfmiddlewaretoken = document.getElementsByName('csrfmiddlewaretoken')[0].value;
+		
 		$scope.type = 'upload';
+		$scope.csrftoken = csrfmiddlewaretoken;
 
 		$scope.teacherList = [];
-
-		var csrfmiddlewaretoken = document.getElementsByName('csrfmiddlewaretoken')[0].value;
 
 		function addCsrf (formData) {
 
 		}
 		//上传处；
-		$scope.formData_upload = {};
+		// $scope.formData_uploadS = {};
+		// $scope.formData_uploadT = {};
 		$scope.formData_assign = {};
 		$scope.formData_deadline = {};
 		$scope.formData_blind = {}
 
 		$scope.changeUpload = function() {
 			$scope.type = 'upload';
+			$scope.csrftoken = csrfmiddlewaretoken;
 		}
 
 		$scope.changeAssign = function() {
@@ -48,6 +51,9 @@ app.controller('AdminCtrl',[
 			$scope.type = 'defense';
 		}
 
+		$scope.changeStudents = function() {
+			$scope.type = 'students';
+		}
 
 		$scope.submitTeacherList = function() {
 			var teacherIDList = [];
@@ -79,19 +85,41 @@ app.controller('AdminCtrl',[
 		}
 
 
-		$scope.submitUpload = function(data) {
-			data.csrfmiddlewaretoken = csrfmiddlewaretoken;
+		// $scope.submitUpload = function(data) {
+		// 	data.csrfmiddlewaretoken = csrfmiddlewaretoken;
+		// 	$http({
+		// 		method: 'POST',
+		// 		url: 'assign/upload',
+		// 		data: $.param(data),
+		// 		headers: {
+  //                   'Content-Type': 'multipart/form-data'
+		// 		}
+		// 	}).success(function(data) {
+		// 		if (data) {
+		// 			alert('提交成功！~');
+		// 		}
+		// 	}).error(function() {
+		// 		alert('对不起，没有提交成功！~');
+		// 	});
+		// }
+
+		$scope.createTasks = function() {
+			data = {
+				csrfmiddlewaretoken: csrfmiddlewaretoken
+			}
 			$http({
 				method: 'POST',
-				url: 'assign/upload',
+				url: 'assign/createtasks',
 				data: $.param(data),
 				headers: {
-                    'Content-Type': 'application/x-www-form-urlencoded'
+					'Content-Type': 'application/x-www-form-urlencoded'
 				}
 			}).success(function(data) {
 				if (data) {
-					alert('提交成功！~');
+					alert('已完成！');
 				}
+			}).error(function() {
+				alert('对不起，失败！');
 			});
 		}
 
