@@ -21,6 +21,10 @@ app.config(['$routeProvider',
 				templateUrl: 'pages/admin.html',
 				controller:'AdminCtrl'
 			}).
+			when('/viewtask/:studentId', {
+				templateUrl:'pages/adminDetail.html',
+				controller: 'AdminDetailCtrl'
+			}).
 			otherwise({
 				redirectTo:'/students'
 			});

@@ -94,8 +94,34 @@
         </div>
     </div>
     <div ng-if="type === 'students'" class="col-xs-9 page-right">
-        <div>
-
-        </div>
-    </div>
+        <div >
+            <table class="table">
+                <thead>
+                    <th>学号</th>
+                    <th>姓名</th>
+                    <th>题目</th>
+                    <th>方向</th>
+                    <th>导师</th>
+                    <th>盲审</th>
+                    <th>专家</th>
+                    <th>答辩</th>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="student in studentList">
+                      <td>{{student.StudentID}}</td>
+                      <td>{{student.StudentName}}</td>
+                      <td class="max_td">{{student.Title}}</td>
+                      <td>{{student.Category}}</td>
+                      <td class="max_td_sm">{{student.Teacher}}</td>
+                      <td>{{student.isAnonymous}}</td>
+                      <td>{{student.Expert}}</td>
+                      <td>{{student.ExamTeacherName}}</td>
+                      <td>
+                        <a href="#/viewtask/{{student.StudentID}}">查看</a>
+                      </td>
+                    </tr>
+                </tbody>
+              <button ng-click="">提交</button>
+            </table>
+        </div>    </div>
 </div>

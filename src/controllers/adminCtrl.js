@@ -3,11 +3,17 @@ app.controller('AdminCtrl',[
 	'$http',
 	function($scope, $http) {
 		var csrfmiddlewaretoken = document.getElementsByName('csrfmiddlewaretoken')[0].value;
-		
-		$scope.type = 'upload';
+			
 		$scope.csrftoken = csrfmiddlewaretoken;
 
 		$scope.teacherList = [];
+		$scope.studentList = [];
+
+		$scope.type = 'students';
+		$http.get('/assign/studentlist')
+				.success(function(data) {
+					$scope.studentList = data;
+				})
 
 		function addCsrf (formData) {
 
@@ -53,6 +59,11 @@ app.controller('AdminCtrl',[
 
 		$scope.changeStudents = function() {
 			$scope.type = 'students';
+			$http.get('/assign/studentlist')
+				.success(function(data) {
+					$scope.studentList = data;
+				})
+
 		}
 
 		$scope.submitTeacherList = function() {
