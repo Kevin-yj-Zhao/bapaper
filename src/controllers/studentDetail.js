@@ -13,10 +13,12 @@ app.controller('StudentDetailCtrl',[
 
 
 		$scope.submit = function(data) {
+			$scope.formData = data;
+			$scope.formData.Status = 0;
 			$http({
 				method: 'POST',
 				url: url,
-				data: $.param(data),
+				data: $.param($scope.formData),
 				headers: {
                     'Content-Type': 'application/x-www-form-urlencoded'
 				}

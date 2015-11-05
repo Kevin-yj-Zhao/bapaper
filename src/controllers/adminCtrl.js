@@ -10,7 +10,8 @@ app.controller('AdminCtrl',[
 		$scope.studentList = [];
 
 		$scope.type = 'students';
-		$http.get('/assign/studentlist')
+		$scope.filter = 'all';
+		$http.get('/assign/studentlist/all')
 				.success(function(data) {
 					$scope.studentList = data;
 				})
@@ -59,11 +60,52 @@ app.controller('AdminCtrl',[
 
 		$scope.changeStudents = function() {
 			$scope.type = 'students';
-			$http.get('/assign/studentlist')
+			$scope.filter = 'all';
+			$http.get('/assign/studentlist/all')
 				.success(function(data) {
 					$scope.studentList = data;
-				})
+				});
+			
+		}
 
+		$scope.changeSubed = function() {
+			$scope.type = 'students';
+			$scope.filter = 'subed';
+			$http.get('/assign/studentlist/subed')
+				.success(function(data) {
+					$scope.studentList = data;
+				});
+			
+		}
+
+		$scope.changeUnsubed = function() {
+			$scope.type = 'students';
+			$scope.filter = 'unsubed';
+			$http.get('/assign/studentlist/unsubed')
+				.success(function(data) {
+					$scope.studentList = data;
+				});
+			
+		}
+
+		$scope.changePass = function() {
+			$scope.type = 'students';
+			$scope.filter = 'pass';
+			$http.get('/assign/studentlist/pass')
+				.success(function(data) {
+					$scope.studentList = data;
+				});
+			
+		}
+
+		$scope.changeNotpass = function() {
+			$scope.type = 'students';
+			$scope.filter = 'notpass';
+			$http.get('/assign/studentlist/notpass')
+				.success(function(data) {
+					$scope.studentList = data;
+				});
+			
 		}
 
 		$scope.submitTeacherList = function() {
@@ -118,6 +160,8 @@ app.controller('AdminCtrl',[
 			data = {
 				csrfmiddlewaretoken: csrfmiddlewaretoken
 			}
+			document.getElementById("buttonCreate").disabled = true;
+			document.getElementById("creating").style.visibility="visible";
 			$http({
 				method: 'POST',
 				url: 'assign/createtasks',
@@ -126,10 +170,14 @@ app.controller('AdminCtrl',[
 					'Content-Type': 'application/x-www-form-urlencoded'
 				}
 			}).success(function(data) {
+				document.getElementById("buttonCreate").disabled = false;
+				document.getElementById("creating").style.visibility="hidden";
 				if (data) {
 					alert('已完成！');
 				}
 			}).error(function() {
+				document.getElementById("buttonCreate").disabled = false;
+				document.getElementById("creating").style.visibility="hidden";
 				alert('对不起，失败！');
 			});
 		}
@@ -152,8 +200,50 @@ app.controller('AdminCtrl',[
 			});
 		}
 
-		$scope.submitBlind = function(data) {
+		$scope.submitBlindMidterm = function(data) {
 			data.csrfmiddlewaretoken = csrfmiddlewaretoken;
+			data.check = null;
+			data.defense = null;
+			$http({
+				method: 'POST',
+				url: 'assign/blind',
+				data: $.param(data),
+				headers: {
+					'Content-Type': 'application/x-www-form-urlencoded'
+				}
+			}).success(function(data) {
+				if (data) {
+					alert('提交成功！');
+				}
+			}).error(function() {
+				alert('对不起，没有提交成功！~');
+			});
+		}
+
+		$scope.submitBlindCheck = function(data) {
+			data.csrfmiddlewaretoken = csrfmiddlewaretoken;
+			data.midterm = null;
+			data.defense = null;
+			$http({
+				method: 'POST',
+				url: 'assign/blind',
+				data: $.param(data),
+				headers: {
+					'Content-Type': 'application/x-www-form-urlencoded'
+				}
+			}).success(function(data) {
+				if (data) {
+					alert('提交成功！');
+				}
+			}).error(function() {
+				alert('对不起，没有提交成功！~');
+			});
+		}
+
+		$scope.submitBlindDefense = function(data) {
+			data.csrfmiddlewaretoken = csrfmiddlewaretoken;
+			data.midterm = null;
+			data.check = null;
 			$http({
 				method: 'POST',
 				url: 'assign/blind',
@@ -221,6 +311,60 @@ app.controller('AdminCtrl',[
 				document.getElementById("buttonDefense").disabled = false;
 				document.getElementById("waiting").style.visibility="hidden";
 				alert('对不起，没有分配成功！~');
+			});
+		}
+
+		$scope.removeExpert = function() {
+			var data = {csrfmiddlewaretoken: csrfmiddlewaretoken};
+			document.getElementById("buttonExpert").disabled = true;
+			document.getElementById("buttonDefense").disabled = true;
+			document.getElementById("waiting").style.visibility="visible";
+			$http({
+				method: 'POST',
+				url: 'assign/removeassign',
+				data: $.param(data),
+				headers: {
+					'Content-Type': 'application/x-www-form-urlencoded'
+				}
+			}).success(function(data) {
+				if (data) {
+					document.getElementById("buttonExpert").disabled = false;
+					document.getElementById("buttonDefense").disabled = false;
+					document.getElementById("waiting").style.visibility="hidden";
+					alert('成功！');
+				}
+			}).error(function() {
+				document.getElementById("buttonExpert").disabled = false;
+				document.getElementById("buttonDefense").disabled = false;
+				document.getElementById("waiting").style.visibility="hidden";
+				alert('对不起，没有成功！~');
+			});
+		}
+
+		$scope.removeDefense = function() {
+			var data = {csrfmiddlewaretoken: csrfmiddlewaretoken};
+			document.getElementById("buttonExpert").disabled = true;
+			document.getElementById("buttonDefense").disabled = true;
+			document.getElementById("waiting").style.visibility="visible";
+			$http({
+				method: 'POST',
+				url: 'assign/removedefense',
+				data: $.param(data),
+				headers: {
+					'Content-Type': 'application/x-www-form-urlencoded'
+				}
+			}).success(function(data) {
+				if (data) {
+					document.getElementById("buttonExpert").disabled = false;
+					document.getElementById("buttonDefense").disabled = false;
+					document.getElementById("waiting").style.visibility="hidden";
+					alert('成功！');
+				}
+			}).error(function() {
+				document.getElementById("buttonExpert").disabled = false;
+				document.getElementById("buttonDefense").disabled = false;
+				document.getElementById("waiting").style.visibility="hidden";
+				alert('对不起，没有成功！~');
 			});
 		}
 	}

@@ -8,6 +8,10 @@
 			<button type="button" class="list-group-item" ng-click="changeBlind()">抽取盲审</button>
       <button type="button" class="list-group-item" ng-click="changeDefense()">分组和答辩</button>
       <button type="button" class="list-group-item" ng-click="changeStudents()">学生列表</button>
+      <button type="button" class="list-group-item" ng-click="changeSubed()">已提交列表</button>
+      <button type="button" class="list-group-item" ng-click="changeUnsubed()">未提交列表</button>
+      <button type="button" class="list-group-item" ng-click="changePass()">审核通过</button>
+      <button type="button" class="list-group-item" ng-click="changeNotpass()">审核未通过</button>
 		</div>
     </div>
     <div ng-if="type === 'upload'" class="col-xs-9 page-right">
@@ -32,7 +36,10 @@
           </form>
         </div>
     		<br/><br/>
-    		<button ng-click="createTasks()">生成任务书</button>
+    		<button id="buttonCreate" ng-click="createTasks()">生成任务书</button>
+        <div id="creating" style="visibility: hidden;">
+            正在生成...
+          </div>
     	</div>
     </div>
     <div ng-if="type === 'assign'" class="col-xs-9 page-right">
@@ -78,20 +85,40 @@
     <div ng-if="type === 'blind'" class="col-xs-9 page-right">
        	<div>
        		<form>
-       			<label>请输入盲审后一位学号</label>
-	       		<input type="text" name="lastNumber" ng-model="formData_blind.lastNumber">
-	       		<button ng-click="submitBlind(formData_blind)">提交</button>
+       			<label>请输入中期盲审抽取比例(%)</label>
+	       		<input type="text" name="midterm" ng-model="formData_blind.midterm">
+	       		<button ng-click="submitBlindMidterm(formData_blind)">提交</button>
        		</form>
        	</div>
+        <div>
+          <form>
+            <label>请输入论文查重抽取比例(%)</label>
+            <input type="text" name="check" ng-model="formData_blind.check">
+            <button ng-click="submitBlindCheck(formData_blind)">提交</button>
+          </form>
+        </div>
+        <div>
+          <form>
+            <label>请输入答辩盲审抽取比例(%)</label>
+            <input type="text" name="defense" ng-model="formData_blind.defense">
+            <button ng-click="submitBlindDefense(formData_blind)">提交</button>
+          </form>
+        </div>
     </div>
     <div ng-if="type === 'defense'" class="col-xs-9 page-right">
         <div>
           <button id="buttonExpert" ng-click="assignExpert()">专家分组</button>
           <button id="buttonDefense" ng-click="assignDefense()">交叉答辩</button>
-          <div id="waiting" style="visibility: hidden;">
+        </div>
+        <br/><br/><br/>
+        <div>
+          <button id="buttonExpert" ng-click="removeExpert()">清除专家分组</button>
+          <button id="buttonDefense" ng-click="removeDefense()">清除答辩分组</button>
+        </div>
+        <br/><br/>
+        <div id="waiting" style="visibility: hidden;">
             运行中...
           </div>
-        </div>
     </div>
     <div ng-if="type === 'students'" class="col-xs-9 page-right">
         <div >
@@ -121,7 +148,8 @@
                       </td>
                     </tr>
                 </tbody>
-              <button ng-click="">提交</button>
+              <a href="/assign/export/{{filter}}">导出xls</a>
             </table>
-        </div>    </div>
+        </div>
+    </div>
 </div>

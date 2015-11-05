@@ -11,7 +11,17 @@ app.controller('AdminDetailCtrl',[
 				$scope.formData.csrfmiddlewaretoken = csrfmiddlewaretoken;
 			});
 
-
+		$scope.submit = function(data) {
+			$scope.formData = data;
+			$http({
+				method: 'POST',
+				url: url,
+				data: $.param($scope.formData),
+				headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded'
+				}
+			});
+		}
 
 		$scope.selectType1 = [{
 			id: '1',
