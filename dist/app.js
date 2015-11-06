@@ -38888,7 +38888,7 @@ app.controller('AdminCtrl',[
 				method: 'POST',
 				url: 'assign/blind',
 				data: $.param(data),
-				header: {
+				headers: {
 					'Content-Type': 'application/x-www-form-urlencoded'
 				}
 			}).success(function(data) {
