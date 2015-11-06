@@ -5,6 +5,8 @@ app.controller('ChangePasswordCtrl', [
 	function($scope, $http, $location) {
 
 		$scope.formData = {};
+		var csrfmiddlewaretoken = document.getElementsByName('csrfmiddlewaretoken')[0].value;
+		$scope.formData.csrfmiddlewaretoken = csrfmiddlewaretoken;
 
 		$scope.submit = function(data) {
 			if ($scope.formData.oldPassword && $scope.formData.newPassword && $scope.confirmPassword) {
@@ -25,7 +27,7 @@ app.controller('ChangePasswordCtrl', [
 						}
 					}).success(function(data) {
 						if (data) {
-							$location.path('/');
+							window.location.reload();
 						}
 					}).error(function(data) {
 						alert('对不起，提交失败！~');
