@@ -6,37 +6,59 @@
 			<button type="button" class="list-group-item" ng-click="changeAssign()">分配专家</button>
 			<button type="button" class="list-group-item" ng-click="changeDeadline()">截止时间</button>
 			<button type="button" class="list-group-item" ng-click="changeBlind()">抽取盲审</button>
+      <button type="button" class="list-group-item" ng-click="changeDefense()">分组和答辩</button>
+      <button type="button" class="list-group-item" ng-click="changeStudents()">学生列表</button>
+      <button type="button" class="list-group-item" ng-click="changeSubed()">已提交列表</button>
+      <button type="button" class="list-group-item" ng-click="changeUnsubed()">未提交列表</button>
+      <button type="button" class="list-group-item" ng-click="changePass()">审核通过</button>
+      <button type="button" class="list-group-item" ng-click="changeNotpass()">审核未通过</button>
 		</div>
     </div>
     <div ng-if="type === 'upload'" class="col-xs-9 page-right">
     	<div>
-    		<form>
-    			<label>导入学生文件</label>
-    			<input type="file" name="students" ng-model="formData_upload.students">
-    			<label>导入学生文件</label>
-    			<input type="file" name="teachers" ng-model="formData_upload.teachers">
-    			<button ng-click="submitUpload(formData_upload)">提交文件</button>
-    		</form>
-    		
+        <div id="download-template">
+          <a href="/assign/download/student">下载学生模板</a>
+          <a href="/assign/download/teacher">下载教师模板</a>
+        </div>
+        <div>
+          <form method="post" action="/assign/upload" enctype="multipart/form-data">
+            <input type="hidden" name="csrfmiddlewaretoken" value={{csrftoken}}>
+            <label>导入学生文件</label>
+            <input type="file" name="students">
+            <button type="submit">提交文件</button>
+          </form>
+          <br/>
+          <form method="post" action="/assign/upload" enctype="multipart/form-data">
+            <input type="hidden" name="csrfmiddlewaretoken" value={{csrftoken}}>
+            <label>导入老师文件</label>
+            <input type="file" name="teachers">
+            <button type="submit">提交文件</button>
+          </form>
+        </div>
+    		<br/><br/>
+    		<button id="buttonCreate" ng-click="createTasks()">生成任务书</button>
+        <div id="creating" style="visibility: hidden;">
+            正在生成...
+          </div>
     	</div>
     </div>
     <div ng-if="type === 'assign'" class="col-xs-9 page-right">
        	<div >
             <table class="table">
                 <thead>
+                    <th>教师工号</th>
+                    <th>姓名</th>
                     <th>方向</th>
-                    <th>老师姓名</th>
                     <th>所在导师组</th>
-                    <th>是否为专家</th>
                     <td>操作</td>
                 </thead>
                 <tbody>
                     <tr ng-repeat="teacher in teacherList">
+                      <td>{{teacher.TeacherID}}</td>
+                      <td>{{teacher.Name}}
                       <td>{{teacher.Category}}</td>
-                      <td>{{teacher.Name}}</td>
-                      <td>{{teacher.isExpert}}</td>
                       <td>{{teacher.Team}}</td>
-                      <td><input type="checkbox" ng-model="teacher.type"></td>
+                      <td><input type="checkbox" ng-model="teacher.isExpert" ng-checked={{teacher.isExpert}} value={{teacher.isExpert}}></td>
                     </tr>
                 </tbody>
 	       		  <button ng-click="submitTeacherList()">提交名单</button>
@@ -45,24 +67,89 @@
     </div>
     <div ng-if="type === 'deadline'" class="col-xs-9 page-right">
 	    <form>
-	    	<div>
-	       		<label>任务书截止时间</label>
+	    	  <div>
+            <label>提交任务书开始时间</label>
+            <input type="date" name="taskStarttime" required ng-model="formData_deadline.taskStarttime">
+	       		<label>提交任务书截止时间</label>
 	       		<input type="date" name="taskDeadline" required ng-model="formData_deadline.taskDeadline">
 	       	</div>
 	       	<div>
-	       		<label>审核截止时间</label>
+            <label>修改任务书开始时间</label>
+            <input type="date" name="reviewDeadtime" required ng-model="formData_deadline.reviewStarttime">
+            <label>修改任务书截止时间</label>
 	       		<input type="date" name="reviewDeadline" required ng-model="formData_deadline.reviewDeadline">
 	       	</div>
-	       	<button ng-click="submitDeadline(formData_deadline)">提交截止时间</button>
+	       	<button ng-click="submitDeadline(formData_deadline)">提交</button>
 	    </form>
     </div>
     <div ng-if="type === 'blind'" class="col-xs-9 page-right">
        	<div>
        		<form>
-       			<label>请输入盲审后一位学号</label>
-	       		<input type="text" name="lastNumber" ng-model="formData_blind.lastNumber">
-	       		<button ng-click="submitBlind(formData_blind)">提交</button>
+       			<label>请输入中期盲审抽取比例(%)</label>
+	       		<input type="text" name="midterm" ng-model="formData_blind.midterm">
+	       		<button ng-click="submitBlindMidterm(formData_blind)">提交</button>
        		</form>
        	</div>
+        <div>
+          <form>
+            <label>请输入论文查重抽取比例(%)</label>
+            <input type="text" name="check" ng-model="formData_blind.check">
+            <button ng-click="submitBlindCheck(formData_blind)">提交</button>
+          </form>
+        </div>
+        <div>
+          <form>
+            <label>请输入答辩盲审抽取比例(%)</label>
+            <input type="text" name="defense" ng-model="formData_blind.defense">
+            <button ng-click="submitBlindDefense(formData_blind)">提交</button>
+          </form>
+        </div>
+    </div>
+    <div ng-if="type === 'defense'" class="col-xs-9 page-right">
+        <div>
+          <button id="buttonExpert" ng-click="assignExpert()">专家分组</button>
+          <button id="buttonDefense" ng-click="assignDefense()">交叉答辩</button>
+        </div>
+        <br/><br/><br/>
+        <div>
+          <button id="buttonExpert" ng-click="removeExpert()">清除专家分组</button>
+          <button id="buttonDefense" ng-click="removeDefense()">清除答辩分组</button>
+        </div>
+        <br/><br/>
+        <div id="waiting" style="visibility: hidden;">
+            运行中...
+          </div>
+    </div>
+    <div ng-if="type === 'students'" class="col-xs-9 page-right">
+        <div >
+            <table class="table">
+                <thead>
+                    <th>学号</th>
+                    <th>姓名</th>
+                    <th>题目</th>
+                    <th>方向</th>
+                    <th>导师</th>
+                    <th>盲审</th>
+                    <th>专家</th>
+                    <th>答辩</th>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="student in studentList">
+                      <td>{{student.StudentID}}</td>
+                      <td>{{student.StudentName}}</td>
+                      <td class="max_td">{{student.Title}}</td>
+                      <td>{{student.Category}}</td>
+                      <td class="max_td_sm">{{student.Teacher}}</td>
+                      <td>{{student.isAnonymous}}</td>
+                      <td>{{student.Expert}}</td>
+                      <td>{{student.ExamTeacherName}}</td>
+                      <td>
+                        <a href="#/viewtask/{{student.StudentID}}">查看</a>
+                      </td>
+                    </tr>
+                </tbody>
+              <a href="/assign/export/{{filter}}">导出xls</a>
+            </table>
+        </div>
     </div>
 </div>

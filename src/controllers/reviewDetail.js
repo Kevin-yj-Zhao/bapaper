@@ -21,6 +21,12 @@ app.controller('ReviewDetailCtrl',[
 				headers: {
                     'Content-Type': 'application/x-www-form-urlencoded'
 				}
+			}).success(function(data) {
+				if (data) {
+					alert('提交成功！');
+				}
+			}).error(function() {
+				alert('对不起，没有提交成功！~');
 			});
 		}
 

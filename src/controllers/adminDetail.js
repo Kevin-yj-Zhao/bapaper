@@ -1,9 +1,9 @@
-app.controller('StudentDetailCtrl',[
+app.controller('AdminDetailCtrl',[
 	'$scope',
 	'$http',
 	'$routeParams',
 	function($scope, $http, $routeParams) {
-		var url = '/assign/student/' + $routeParams.studentId;
+		var url = '/assign/viewtask/' + $routeParams.studentId;
 		$http.get(url)
 			.success(function(data) {
 				$scope.formData = data;
@@ -11,10 +11,8 @@ app.controller('StudentDetailCtrl',[
 				$scope.formData.csrfmiddlewaretoken = csrfmiddlewaretoken;
 			});
 
-
 		$scope.submit = function(data) {
 			$scope.formData = data;
-			$scope.formData.Status = 0;
 			$http({
 				method: 'POST',
 				url: url,
@@ -22,12 +20,6 @@ app.controller('StudentDetailCtrl',[
 				headers: {
                     'Content-Type': 'application/x-www-form-urlencoded'
 				}
-			}).success(function(data) {
-				if (data) {
-					alert('提交成功！');
-				}
-			}).error(function(data) {
-				alert(data);
 			});
 		}
 
@@ -84,5 +76,6 @@ app.controller('StudentDetailCtrl',[
 			id: '5',
 			name: '教师课题'
 		}];
+
 	}
 ]);

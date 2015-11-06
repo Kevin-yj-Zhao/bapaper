@@ -1,0 +1,183 @@
+<form class="form-horizontal">
+
+	<div class="control-group center-block">
+	  	<label class="control-label" for="teacherName">指导老师姓名</label>
+	  	<input type="text" ng-model="formData.Teacher"id="teacherName">
+	</div>
+
+	<div class="control-group">
+	  	<label class="control-label" for="schedule">指导老师ID</label>
+	  	<input type="text" ng-model="formData.UserID" id="userId">
+	</div>
+
+	<div class="control-group">
+	  	<label class="control-label" for="academicTitle">指导老师职称</label>
+	  	<input type="text" ng-model="formData.AcademicTitle" id="academicTitle">
+	</div>
+
+	<div class="control-group">
+	  	<label class="control-label" for="affiliation">指导老师学院</label>
+	  	<input type="text" ng-model="formData.Affiliation" id="affiliation">
+	</div>
+
+	<div class="control-group">
+	  	<label class="control-label" for="teacherPhone">指导老师电话</label>
+	  	<input type="text" ng-model="formData.TeacherPhone" id="teacherPhone">
+	</div>
+
+	<div class="control-group">
+	  	<label class="control-label" for="teacherEmail">指导老师邮箱</label>
+	  	<input type="text" ng-model="formData.TeacherEmail" id="teacherEmail">
+	</div>
+
+	<div class="control-group">
+	  	<label class="control-label" for="studentID">学号</label>
+	  	<input type="text" ng-model="formData.StudentID" id="studentID">
+	</div>
+
+	<div class="control-group">
+	  	<label class="control-label" for="studentName">学生姓名</label>
+	  	<input type="text" ng-model="formData.Name" id="studentName">
+	</div>
+
+	<div class="control-group">
+	  	<label class="control-label" for="grade">年级</label>
+	  	<input type="text" ng-model="formData.Grade" id="grade">
+	</div>
+
+	<div class="control-group">
+	  	<label class="control-label" for="major">专业</label>
+	  	<input type="text" ng-model="formData.Major" id="major">
+	</div>
+
+	<div class="control-group">
+	  	<label class="control-label" for="class">班级</label>
+	  	<input type="text" ng-model="formData.Class" id="class">
+	</div>
+
+	<div class="control-group">
+	  	<label class="control-label" for="studentPhone">学生电话</label>
+	  	<input type="text" ng-model="formData.StudentPhone" id="studentPhone">
+	</div>
+
+	<div class="control-group">
+	  	<label class="control-label" for="Title">论文题目名</label>
+	  	<input type="text" ng-model="formData.Title" id="Title">
+	</div>
+	<div class="control-group">
+	  	<label class="control-label" for="EnglishTitle">论文英文题目</label>
+	  	<input type="text" ng-model="formData.EnglishTitle" id="EnglishTitle">
+	</div>
+
+	<div class="control-group">
+		<label class="control-label" for="type1">种类1</label>
+		<select ng-model="formData.Type1" ng-options="m.id as m.name for m in selectType1">
+    		<option value="">-- 请选择 --</option>
+		</select>
+	</div>
+
+	<div class="control-group">
+		<label class="control-label" for="type1">种类2</label>
+		<select ng-model="formData.Type2" ng-options="m.id as m.name for m in selectType2">
+    		<option value="">-- 请选择 --</option>
+		</select>
+	</div>
+
+	<div class="control-group">
+		<label class="control-label" for="type1">种类3</label>
+		<select ng-model="formData.Type3" ng-options="m.id as m.name for m in selectType3">
+    		<option value="">-- 请选择 --</option>
+		</select>
+	</div>
+
+	<div class="control-group">
+		<label class="control-label" for="type1">种类4</label>
+		<select ng-model="formData.Type4" ng-options="m.id as m.name for m in selectType4">
+    		<option value="">-- 请选择 --</option>
+		</select>
+	</div>
+
+	<div class="control-group">
+	  	<label class="control-label" for="task1">任务1</label>
+	  	<input type="text" ng-model="formData.Task1" id="task1">
+	</div>
+	<div class="control-group">
+	  	<label class="control-label" for="task2">任务2</label>
+	  	<input type="text" ng-model="formData.Task2" id="task2">
+	</div>
+	<div class="control-group">
+	  	<label class="control-label" for="task3">任务3</label>
+	  	<input type="text" ng-model="formData.Task3" id="task3">
+	</div>
+	<div class="control-group">
+	  	<label class="control-label" for="task4">任务4</label>
+	  	<input type="text" ng-model="formData.Task4" id="task4">
+	</div>
+
+	<div class="control-group">
+	  	<label class="control-label" for="Outcome1">目标1</label>
+	  	<input type="text" ng-model="formData.Outcome1" id="Outcome1">
+	</div>
+
+	<div class="control-group">
+	  	<label class="control-label" for="Outcome2">目标2</label>
+	  	<input type="text" ng-model="formData.Outcome2" id="Outcome1">
+	</div>
+
+	<div class="control-group">
+	  	<label class="control-label" for="Outcome3">目标3</label>
+	  	<input type="text" ng-model="formData.Outcome3" id="Outcome1">
+	</div>
+
+	<div class="control-group">
+	  	<label class="control-label" for="detail">主要内容</label>
+	  	<textarea ng-model="formData.Detail" rows="5" id="Detail"></textarea>
+	</div>
+
+	<div class="control-group">
+	  	<label class="control-label" for="reference">参考文献</label>
+	  	<textarea ng-model="formData.Reference" rows="5" id="reference"></textarea>
+	</div>
+
+	<div class="control-group">
+	  	<label class="control-label" for="schedule">进度安排</label>
+	  	<textarea ng-model="formData.Schedule" rows="5" id="schedule"></textarea>
+	</div>
+
+	<div class="control-group">
+	  	<label class="control-label" for="schedule">专家</label>
+	  	<input type="text" ng-model="formData.Expert" id="expert">
+	</div>
+
+	<div class="control-group">
+	  	<label class="control-label" for="schedule">专家ID</label>
+	  	<input type="text" ng-model="formData.ExpertID" id="expertId">
+	</div>
+
+	<div class="control-group">
+	  	<label class="control-label" for="schedule">修改意见</label>
+	  	<textarea ng-model="formData.Review"  rows="5" id="review"></textarea>
+	</div>
+
+	<div class="control-group">
+	  	<label class="control-label" for="schedule">是否通过</label>
+	  	<input type="text" ng-model="formData.Status" id="status">
+	</div>
+
+	<div class="control-group">
+	  	<label class="control-label" for="schedule">是否盲审</label>
+	  	<input type="text" ng-model="formData.isAnonymous" id="isAnonymous">
+	</div>
+
+	<div class="control-group">
+	  	<label class="control-label" for="schedule">答辩老师</label>
+	  	<input type="text" ng-model="formData.ExamTeacherName" id="examTeacher">
+	</div>
+
+	<div class="control-group">
+	  	<label class="control-label" for="schedule">答辩老师ID</label>
+	  	<input type="text" ng-model="formData.ExamTeacherID" id="examTeacherId">
+	</div>
+
+	<input type="submit" value="提交" ng-click="submit(formData)">
+</form>
