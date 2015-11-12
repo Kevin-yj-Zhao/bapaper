@@ -7,6 +7,7 @@
 			<button type="button" class="list-group-item" ng-click="changeDeadline()">截止时间</button>
 			<button type="button" class="list-group-item" ng-click="changeBlind()">抽取盲审</button>
       <button type="button" class="list-group-item" ng-click="changeDefense()">分组和答辩</button>
+      <button type="button" class="list-group-item" ng-click="changeManageData()">数据管理</button>
       <button type="button" class="list-group-item" ng-click="changeStudents()">学生列表</button>
       <button type="button" class="list-group-item" ng-click="changeSubed()">已提交列表</button>
       <button type="button" class="list-group-item" ng-click="changeUnsubed()">未提交列表</button>
@@ -69,17 +70,20 @@
     </div>
     <div ng-if="type === 'deadline'" class="col-xs-9 page-right">
 	    <form>
+          <div>
+            日期格式：2015-11-01
+          </div>
 	    	  <div>
             <label>提交任务书开始时间</label>
-            <input type="date" name="taskStarttime" required ng-model="formData_deadline.taskStarttime">
+            <input type="text" name="taskStarttime" required ng-model="formData_deadline.taskStarttime">
 	       		<label>提交任务书截止时间</label>
-	       		<input type="date" name="taskDeadline" required ng-model="formData_deadline.taskDeadline">
+	       		<input type="text" name="taskDeadline" required ng-model="formData_deadline.taskDeadline">
 	       	</div>
 	       	<div>
             <label>修改任务书开始时间</label>
-            <input type="date" name="reviewDeadtime" required ng-model="formData_deadline.reviewStarttime">
+            <input type="text" name="reviewDeadtime" required ng-model="formData_deadline.reviewStarttime">
             <label>修改任务书截止时间</label>
-	       		<input type="date" name="reviewDeadline" required ng-model="formData_deadline.reviewDeadline">
+	       		<input type="text" name="reviewDeadline" required ng-model="formData_deadline.reviewDeadline">
 	       	</div>
 	       	<button ng-click="submitDeadline(formData_deadline)">提交</button>
 	    </form>
@@ -122,6 +126,22 @@
             运行中...
           </div>
     </div>
+
+    <div ng-if="type === 'manageData'" class="col-xs-9 page-right">
+        <div>
+          <button id="buttonRemoveStudents" ng-click="removeStudents()">清除学生数据</button>
+          
+        </div>
+        <br/><br/><br/>
+        <div>
+          <button id="buttonRemoveTeachers" ng-click="removeTeachers()">清除老师数据</button>
+        </div>
+        <br/><br/>
+        <div id="waiting" style="visibility: hidden;">
+            运行中...
+          </div>
+    </div>
+
     <div ng-if="type === 'students'" class="col-xs-9 page-right">
         <div >
             <table class="table">

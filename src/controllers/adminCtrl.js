@@ -38,16 +38,18 @@ app.controller('AdminCtrl',[
 			// 		$scope.teacherList = data;
 			// 	});
 			// }
-			if ($scope.teacherList.length === 0) {
-				$http.get('/assign/teachers')
-					.success(function(data) {
-						$scope.teacherList = data;
-					})
-			} 
+			$http.get('/assign/teachers')
+				.success(function(data) {
+					$scope.teacherList = data;
+				})
 		}
 
 		$scope.changeDeadline = function() {
 			$scope.type = 'deadline';
+			$http.get('assign/deadline')
+				.success(function(data) {
+					$scope.formData_deadline = data;
+				})
 		}
 
 		$scope.changeBlind = function() {
@@ -56,6 +58,10 @@ app.controller('AdminCtrl',[
 
 		$scope.changeDefense = function() {
 			$scope.type = 'defense';
+		}
+
+		$scope.changeManageData = function() {
+			$scope.type = 'manageData';
 		}
 
 		$scope.changeStudents = function() {
@@ -366,6 +372,46 @@ app.controller('AdminCtrl',[
 				document.getElementById("waiting").style.visibility="hidden";
 				alert('对不起，没有成功！~');
 			});
+		}
+
+		$scope.removeStudents = function() {
+			var data = {csrfmiddlewaretoken: csrfmiddlewaretoken};
+			if (confirm("确定清除数据吗？")) {
+				$http({
+					method: 'POST',
+					url: 'assign/remove_students',
+					data: $.param(data),
+					headers: {
+						'Content-Type': 'application/x-www-form-urlencoded'
+					}
+				}).success(function(data) {
+					if (data) {
+						alert('清除成功');
+					}
+				}).error(function() {
+					alert('对不起，失败！');
+				});
+			}
+		}
+
+		$scope.removeTeachers = function() {
+			var data = {csrfmiddlewaretoken: csrfmiddlewaretoken};
+			if (confirm("确定清除数据吗？")) {
+				$http({
+					method: 'POST',
+					url: 'assign/remove_teachers',
+					data: $.param(data),
+					headers: {
+						'Content-Type': 'application/x-www-form-urlencoded'
+					}
+				}).success(function(data) {
+					if (data) {
+						alert('清除成功');
+					}
+				}).error(function() {
+					alert('对不起，失败！');
+				});
+			}
 		}
 	}
 ]);
