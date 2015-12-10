@@ -21,7 +21,9 @@
           <a href="/assign/download/student">下载学生模板</a>
           <a href="/assign/download/teacher">下载教师模板</a>
         </div>
+        <br/>
         <div>
+          <p>导入文件名请勿包含中文</p>
           <form method="post" action="/assign/upload" enctype="multipart/form-data">
             <input type="hidden" name="csrfmiddlewaretoken" value={{csrftoken}}>
             <label>导入学生文件</label>

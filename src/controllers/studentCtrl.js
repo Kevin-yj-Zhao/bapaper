@@ -6,6 +6,25 @@ app.controller('StudentCtrl',[
 		$scope.allStudents = [];
 		Students.query(function(data) {
 			$scope.allStudents = data;
+			if ($scope.allStudents.length > 0) {
+				for (var i = 0; i < $scope.allStudents.length; i++) {
+					if ($scope.allStudents[i].Status === -1) {
+						$scope.allStudents[i].reviewStatus = "未提交";
+					}
+					else if ($scope.allStudents[i].Status === 0) {
+						$scope.allStudents[i].reviewStatus = "未审核";
+					}
+					else if ($scope.allStudents[i].Status === 1) {
+						$scope.allStudents[i].reviewStatus = "已通过";
+					}
+					else if ($scope.allStudents[i].Status === 2) {
+						$scope.allStudents[i].reviewStatus = "未通过";
+					}
+					else {
+						$scope.allStudents[i].reviewStatus = "";
+					}
+				}
+			}
 			$scope.students = $scope.allStudents;
 		});
 
@@ -19,7 +38,7 @@ app.controller('StudentCtrl',[
 			var unReviewStudents = [];
 			if (allStudents.length > 0) {
 				for (var i=0; i<allStudents.length; i++) {
-					if (allStudents[i].Status === 0) {
+					if (allStudents[i].Status <= 0) {
 						unReviewStudents.push(allStudents[i]);
 					}
 				}

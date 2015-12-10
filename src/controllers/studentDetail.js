@@ -14,6 +14,10 @@ app.controller('StudentDetailCtrl',[
 
 		$scope.submit = function(data) {
 			$scope.formData = data;
+			if ($scope.formData.Type3 == null || $scope.formData.Type3 == "") {
+				alert('您没有指定课题方向，请填写类别3！');
+				return;
+			}
 			$scope.formData.Status = 0;
 			$http({
 				method: 'POST',

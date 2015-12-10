@@ -6,6 +6,22 @@ app.controller('ReviewCtrl',[
 		
 		Reviews.query(function(data) {
 			$scope.allStudents = data;
+			if ($scope.allStudents.length > 0) {
+				for (var i = 0; i < $scope.allStudents.length; i++) {
+					if ($scope.allStudents[i].Status === 0) {
+						$scope.allStudents[i].reviewStatus = "未审核";
+					}
+					else if ($scope.allStudents[i].Status === 1) {
+						$scope.allStudents[i].reviewStatus = "已通过";
+					}
+					else if ($scope.allStudents[i].Status === 2) {
+						$scope.allStudents[i].reviewStatus = "未通过";
+					}
+					else {
+						$scope.allStudents[i].reviewStatus = "";
+					}
+				}
+			}
 			$scope.reviewStudents = $scope.allStudents;
 		});
 

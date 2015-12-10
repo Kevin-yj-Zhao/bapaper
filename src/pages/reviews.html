@@ -15,8 +15,8 @@
                 <th>论文题目</th>
                 <th>指导老师</th>
                 <th>审核专家</th>
-                <th>提交时间</th>
-                <th>审核时间</th>
+                <!-- <th>提交时间</th> -->
+                <!-- <th>审核时间</th> -->
                 <th>审核状态</th>
                 <td>操作</td>
             </thead>
@@ -26,8 +26,8 @@
                 <td class="max_td">{{reviewStudent.Title}}</td>
                 <td>{{reviewStudent.Teacher}}</td>
                 <td>{{reviewStudent.Expert}}</td>
-                <td>{{reviewStudent.submitTime}}</td>
-                <td>{{reviewStudent.reviewTime}}</td>
+                <!-- <td>{{reviewStudent.submitTime}}</td> -->
+                <!-- <td>{{reviewStudent.reviewTime}}</td> -->
                 <td>{{reviewStudent.reviewStatus}}</td>
                 <td>
                     <a href="#/review/{{reviewStudent.ID}}" ng-if="student.reviewStatus !== '通过'">查看</a>
